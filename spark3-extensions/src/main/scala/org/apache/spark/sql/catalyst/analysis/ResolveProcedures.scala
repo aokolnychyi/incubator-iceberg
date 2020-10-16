@@ -51,8 +51,9 @@ object ResolveProcedures extends Rule[LogicalPlan] {
     }
 
     // optional params should be at the end
+    // pre parameter is required and the current parameter is optional
     procedure.parameters.sliding(2).foreach {
-      case Array(previousParam, currentParam) if previousParam.required && !currentParam.required =>
+      case Array(previousParam, currentParam) if !previousParam.required && currentParam.required =>
         throw new AnalysisException("Optional parameters must be after required ones")
       case _ =>
     }
